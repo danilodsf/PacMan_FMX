@@ -16,8 +16,6 @@ Esta é uma implementação do jogo Pac-Man desenvolvida usando o framework Fire
 * [Problemas Conhecidos](#problemas-conhecidos)
 * [Melhorias Futuras](#melhorias-futuras)
 * [Créditos](#créditos)
-* [Licença](#licença)
-* [Agradecimentos](#agradecimentos)
 * [Contato](#contato)
 
 ## Recursos <a name="recursos"></a>
@@ -48,11 +46,8 @@ Para compilar e executar este jogo, você precisará de:
 1.  Clone o repositório para sua máquina local:
 
     ```bash
-    git clone <url_do_repositório>
+    git clone https://github.com/danilodsf/PacMan_FMX.git
     ```
-
-    *(Substitua `<url_do_repositório>` pela URL real do seu repositório GitHub)*
-
 2.  Abra o arquivo de projeto `PacManFMX.dproj` na IDE do Delphi.
 3.  Certifique-se de que todos os arquivos de imagem necessários estejam nos caminhos relativos corretos (geralmente em um diretório `img/` dentro do projeto).
 4.  Compile e execute o projeto dentro da IDE do Delphi.
@@ -94,17 +89,22 @@ O projeto está principalmente contido no arquivo `uGame.pas`. Os principais pro
 
 ## Problemas Conhecidos <a name="problemas-conhecidos"></a>
 
-* *(Liste quaisquer bugs ou limitações conhecidos aqui. Por exemplo: "A IA dos fantasmas pode ser aprimorada," "Efeitos sonoros não estão implementados," etc.)*
+* De vez em quando o PacMan fica preso antes das esquinas. Provavelmente o problema está relacionado com a velocidade em FSpeedFactor que faz com que a posição XY as vezes esteja fora das condições que permitem o player virar
+* A IA dos fantasmas pode ser aprimorada 
 
 ## Melhorias Futuras <a name="melhorias-futuras"></a>
 
-* *(Liste os recursos que você planeja adicionar ou as melhorias que deseja fazer. Por exemplo: "Implementar efeitos sonoros," "Adicionar diferentes personalidades aos fantasmas," "Melhorar a interface do usuário do jogo," etc.)*
+* Implementar efeitos sonoros
+* Implementar as outras imagens disponíveis na pasta de imagens
+* Implementar a animação do PacMan morrendo ao colidir
+* Adicionar diferentes personalidades aos fantasmas
+* Melhorar a interface do usuário do jogo, criando opções de configuração de velocidade, pausar, etc...
 
 ## Créditos <a name="créditos"></a>
 
-* **Autor:** Seu Nome / Seu Nome de Usuário do GitHub
-* *(Opcional: Credite quaisquer fontes que você usou para imagens, inspiração, etc.)*
+* **Inspiração:** Leonardo Nunes Armelim, que desenvolveu este jogo em Python e os fontes me serviram como base para o desenvolvimento com o Delphi
+https://github.com/Leonardo-Nunes-Armelim/Bytes_Universe
 
-## Licença <a name="licença"></a>
+## Contatos <a name="contato"></a>
 
-*(Especifique a licença sob a qual seu projeto é lançado. Se você não tiver certeza, considere usar a Licença MIT, que é permissiva.)*
+https://www.linkedin.com/in/danilo-fois-27743b142/
