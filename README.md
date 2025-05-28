@@ -2,7 +2,7 @@
 
 Esta é uma implementação do jogo Pac-Man desenvolvida usando o framework FireMonkey (FMX) do Delphi.
 
-
+![Captura de Tela do Jogo](bin/img/game.png)  
 
 ## Índice
 
