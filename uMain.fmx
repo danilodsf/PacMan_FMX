@@ -1,0 +1,16 @@
+object PacManForm: TPacManForm
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  Caption = 'Delphi - PacMan'
+  ClientHeight = 252
+  ClientWidth = 320
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+end

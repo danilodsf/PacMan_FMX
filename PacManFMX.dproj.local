@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/03/06 14:18:51.000.136,=C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2025/03/16 07:07:37.000.951,=C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2025/05/24 16:17:00.000.500,=C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2025/05/24 16:17:41.000.816,C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Unit3.pas=C:\Users\Desenv\Desktop\PacMan\uPrincipalFMX.pas</Transaction>
+    <Transaction>2025/05/24 16:17:41.000.816,C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Unit3.fmx=C:\Users\Desenv\Desktop\PacMan\uPrincipalFMX.fmx</Transaction>
+    <Transaction>2025/05/24 16:17:48.000.980,C:\Users\Desenv\Documents\Embarcadero\Studio\Projects\Project3.dproj=C:\Users\Desenv\Desktop\PacMan\PacManFMX.dproj</Transaction>
+    <Transaction>2025/05/24 18:08:58.000.722,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/24 18:09:14.000.320,C:\Users\Desenv\Desktop\PacMan\Unit1.pas=C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.pas</Transaction>
+    <Transaction>2025/05/24 18:09:14.000.320,C:\Users\Desenv\Desktop\PacMan\Unit1.fmx=C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.fmx</Transaction>
+    <Transaction>2025/05/26 07:48:49.000.909,C:\Users\Desenv\Desktop\PacMan\uPrincipalFMX.pas=</Transaction>
+    <Transaction>2025/05/26 07:49:00.000.093,C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.pas=C:\Users\Desenv\Desktop\PacMan\uPrincipal.pas</Transaction>
+    <Transaction>2025/05/26 07:49:00.000.093,C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.fmx=C:\Users\Desenv\Desktop\PacMan\uPrincipal.fmx</Transaction>
+    <Transaction>2025/05/26 07:49:00.000.125,C:\Users\Desenv\Desktop\PacMan\uPrincipal.fmx=C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.fmx</Transaction>
+    <Transaction>2025/05/26 07:49:00.000.125,C:\Users\Desenv\Desktop\PacMan\uPrincipal.pas=C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.pas</Transaction>
+    <Transaction>2025/05/26 07:49:24.000.995,C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.pas=C:\Users\Desenv\Desktop\PacMan\uPacMan.pas</Transaction>
+    <Transaction>2025/05/26 07:49:24.000.995,C:\Users\Desenv\Desktop\PacMan\uPrincipal2FMX.fmx=C:\Users\Desenv\Desktop\PacMan\uPacMan.fmx</Transaction>
+    <Transaction>2025/05/26 18:12:55.708,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 18:13:03.943,C:\Users\Desenv\Desktop\PacMan\uGhost.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 18:14:12.505,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 18:14:26.727,C:\Users\Desenv\Desktop\PacMan\uMain.fmx=C:\Users\Desenv\Desktop\PacMan\uPacMan.fmx</Transaction>
+    <Transaction>2025/05/26 18:14:26.727,C:\Users\Desenv\Desktop\PacMan\uMain.pas=C:\Users\Desenv\Desktop\PacMan\uPacMan.pas</Transaction>
+    <Transaction>2025/05/26 18:14:36.360,C:\Users\Desenv\Desktop\PacMan\uPacMan.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 18:19:15.206,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 18:19:21.678,C:\Users\Desenv\Desktop\PacMan\uGhostManager.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 19:01:09.952,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 19:01:15.859,C:\Users\Desenv\Desktop\PacMan\uUtils.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 19:09:48.099,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 19:09:53.003,C:\Users\Desenv\Desktop\PacMan\uGame.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 19:24:29.850,C:\Users\Desenv\Desktop\PacMan\uPlayer.pas=C:\Users\Desenv\Desktop\PacMan\uPacMan.pas</Transaction>
+    <Transaction>2025/05/26 21:30:39.442,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/26 21:30:46.039,C:\Users\Desenv\Desktop\PacMan\uSettings.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/27 08:33:30.413,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/27 08:33:36.972,C:\Users\Desenv\Desktop\PacMan\uMovements.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/28 11:00:18.409,=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+    <Transaction>2025/05/28 11:00:24.770,C:\Users\Desenv\Desktop\PacMan\uBoard.pas=C:\Users\Desenv\Desktop\PacMan\Unit1.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<PIOS iOSSimARM64="_iossimulator_DB31C4DE-D476-4B1B-867C-25514EE8719A"/>
+		<NoProfile iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>
