@@ -1,20 +1,33 @@
-unit uGame;
+unit PacMan.Classes.uGame;
 
 interface
 
 uses
-  uPlayer, uSettings, uGhostManager, System.Types, uMovements, uBoard,
-  FMX.Graphics, System.UITypes, FMX.Objects, FMX.Types, FMX.Controls,
-  System.SysUtils, System.Math, FMX.Forms;
+  System.Types,
+  System.UITypes,
+  System.SysUtils,
+  System.Math,
+  FMX.Graphics,
+  FMX.Objects,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Forms,
+  PacMan.Interfaces.Game,
+  PacMan.Interfaces.Player,
+  PacMan.Interfaces.Settings,
+  PacMan.Interfaces.Board,
+  PacMan.Interfaces.GhostManager,
+  PacMan.Interfaces.Movements;
 
 type
-  TGame = class
+  TGame = class(TInterfacedObject, IGame)
   private
-    FSettings: TSettings;
-    FPlayer: TPlayer;
-    FGhostManager: TGhostManager;
-    FMovements: TMovements;
-    FBoard: TBoard;
+    class var FGame: IGame;
+    FSettings: ISettings;
+    FPlayer: IPlayer;
+    FGhostManager: IGhostManager;
+    FMovements: IMovements;
+    FBoard: IBoard;
     FMainForm: TForm;
     PaintBox: TPaintBox;
     Timer: TTimer;
@@ -31,47 +44,42 @@ type
     procedure MovePlayer(key: Word; KeyChar: Char);
     procedure StartGame;
 
-    property Player: TPlayer read FPlayer write FPlayer;
-    property Settings: TSettings read FSettings write FSettings;
-    property GhostManager: TGhostManager read FGhostManager write FGhostManager;
-    property Board: TBoard read FBoard write FBoard;
-    property Movements: TMovements read FMovements write FMovements;
+    function Player: IPlayer;
+    function Settings: ISettings;
+    function GhostManager: IGhostManager;
+    function Board: IBoard;
+    function Movements: IMovements;
 
     constructor Create(AMainForm: TForm);
     destructor Destroy; override;
+
+    class function New(AMainForm: TForm): IGame;
   end;
 
 implementation
+
+uses
+  PacMan.Classes.Settings, PacMan.Classes.Board, PacMan.Classes.Player,
+  PacMan.Classes.Movements, PacMan.Classes.GhostManager;
 
 { TGame }
 
 constructor TGame.Create(AMainForm: TForm);
 begin
   FMainForm := AMainForm;
-
   PaintBox := TPaintBox.Create(AMainForm);
   PaintBox.Parent := AMainForm;
-
   Timer := TTimer.Create(AMainForm);
-
-  FSettings := TSettings.Create;
-  FBoard := TBoard.Create(FSettings);
-  FPlayer := TPlayer.Create(FSettings, FBoard);
-  FMovements := TMovements.Create(FSettings, FBoard, FPlayer);
-  FGhostManager := TGhostManager.Create(FSettings, FMovements, FPlayer);
-  FPlayer.OnPowerPelletCollected := FGhostManager.OnPowerPelletCollected;
 end;
 
 destructor TGame.Destroy;
 begin
-  FSettings.Free;
-  FPlayer.Free;
-  FGhostManager.Free;
-  FBoard.Free;
-  FMovements.Free;
-  PaintBox.Free;
-  Timer.Free;
   inherited;
+end;
+
+function TGame.Settings: ISettings;
+begin
+  result := FSettings;
 end;
 
 procedure TGame.Setup(AMainForm: TForm);
@@ -125,6 +133,16 @@ begin
   Board.DrawScoreboard(Canvas);
   CollectAllDots;
   AnimationStep;
+end;
+
+function TGame.Board: IBoard;
+begin
+  result := FBoard;
+end;
+
+function TGame.Player: IPlayer;
+begin
+  result := FPlayer;
 end;
 
 procedure TGame.ClearWindow(Canvas: TCanvas);
@@ -222,6 +240,11 @@ begin
   end;
 end;
 
+function TGame.GhostManager: IGhostManager;
+begin
+  result := FGhostManager;
+end;
+
 procedure TGame.RestartAfterGhostCollision;
 begin
   if (FSettings.SpriteFrame = 60) and FSettings.EndGame and (FSettings.Lives > -1) then
@@ -309,6 +332,11 @@ begin
     FSettings.SpriteFrame := FSettings.SpriteFrame + FSettings.SpriteSpeed;
 end;
 
+function TGame.Movements: IMovements;
+begin
+  result := FMovements;
+end;
+
 procedure TGame.MovePlayer(key: Word; KeyChar: Char);
 begin
   if Settings.EndGame then
@@ -363,6 +391,21 @@ begin
     VKESCAPE:
       Application.Terminate;
   end;
+end;
+
+class function TGame.New(AMainForm: TForm): IGame;
+begin
+  if not Assigned(FGame) then
+  begin
+    FGame := Self.Create(AMainForm);
+    FSettings := TSettings.Create;
+    FBoard := TBoard.Create(FGame);
+    FPlayer := TPlayer.Create(FGame);
+    FMovements := TMovements.Create(FGame);
+    FGhostManager := TGhostManager.Create(FGame);
+  end;
+
+  Result := FGame;
 end;
 
 procedure TGame.RestartGame;

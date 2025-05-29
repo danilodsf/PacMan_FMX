@@ -1,61 +1,73 @@
-unit uGhostManager;
+unit PacMan.Classes.GhostManager;
 
 interface
 
 uses
-  uGhost,
-  uSettings, System.Types, uMovements, uPlayer, FMX.Graphics;
+  System.Types,
+  FMX.Graphics,
+  PacMan.Interfaces.GhostManager,
+  PacMan.Interfaces.Game,
+  PacMan.Interfaces.Ghost;
 
 type
-  TGhostManager = class
+  TGhostManager = class(TInterfacedObject, iGhostManager)
   private
-    FblueGhost: TGhost;
-    ForangeGhost: TGhost;
-    FpinkGhost: TGhost;
-    FredGhost: TGhost;
-    FHarmless: TGhost;
-    FSettings: TSettings;
-    FMovements: TMovements;
-    FPlayer: TPlayer;
+    FblueGhost: IGhost;
+    ForangeGhost: IGhost;
+    FpinkGhost: IGhost;
+    FredGhost: IGhost;
+    FHarmless: IGhost;
+    FGame: IGame;
 
-    function DirectionHarmlessGhostToPacMan(AGhost: TGhost): TPointF;
-    function DirectionGhostToPacMan(AGhost: TGhost): TPointF;
-    procedure NewRandomDirectionForGhost(AGhost: TGhost);
+    function DirectionHarmlessGhostToPacMan(AGhost: IGhost): TPointF;
+    function DirectionGhostToPacMan(AGhost: IGhost): TPointF;
+    procedure NewRandomDirectionForGhost(AGhost: IGhost);
     procedure DrawGhost(Canvas: TCanvas; color: String; position: TPointF);
     procedure MoveGhostIntoGame(color: String);
     function RandomDirectionForGhost: TPointF;
     function RandomNextDirectionForGhost(direction: TPointF): TPointF;
+    function GetBlueGhost: IGhost;
+    function GetOrangeGhost: IGhost;
+    function GetPinkGhost: IGhost;
+    function GetRedGhost: IGhost;
+    function GetHarmless: IGhost;
+
+    procedure SetBlueGhost(const AValue: IGhost);
+    procedure SetOrangeGhost(const AValue: IGhost);
+    procedure SetPinkGhost(const AValue: IGhost);
+    procedure SetRedGhost(const AValue: IGhost);
+    procedure SetHarmless(const AValue: IGhost);
   public
-    function DistanceGhostToPacMan(AGhost: TGhost): Single;
-    procedure OnPowerPelletCollected;
-    procedure GhostIntelligence(AGhost: TGhost);
+    function DistanceGhostToPacMan(AGhost: IGhost): Single;
+    procedure PowerPelletCollected;
+    procedure GhostIntelligence(AGhost: IGhost);
     procedure Execute(Canvas: TCanvas);
     procedure GhostAI;
-
-    property blueGhost: TGhost read FblueGhost write FblueGhost;
-    property orangeGhost: TGhost read ForangeGhost write ForangeGhost;
-    property pinkGhost: TGhost read FpinkGhost write FpinkGhost;
-    property redGhost: TGhost read FredGhost write FredGhost;
-    property Harmless: TGhost read FHarmless write FHarmless;
-    constructor Create(ASettings: TSettings; AMovements: TMovements; APlayer: TPlayer);
+    property BlueGhost: IGhost read GetBlueGhost write SetBlueGhost;
+    property OrangeGhost: IGhost read GetOrangeGhost write SetOrangeGhost;
+    property PinkGhost: IGhost read GetPinkGhost write SetPinkGhost;
+    property RedGhost: IGhost read GetRedGhost write SetRedGhost;
+    property Harmless: IGhost read GetHarmless write SetHarmless;
+    constructor Create(AGame: IGame);
     destructor Destroy; override;
   end;
 
 implementation
 
+uses
+  PacMan.Classes.uGhost;
+
 { TGhostManager }
 
-constructor TGhostManager.Create(ASettings: TSettings; AMovements: TMovements; APlayer: TPlayer);
+constructor TGhostManager.Create(AGame: IGame);
 begin
-  FSettings := ASettings;
-  FMovements := AMovements;
-  FPlayer := APlayer;
+  FGame := AGame;
 
-  FblueGhost := TGhost.Create(FSettings, 'Blue', 12, 13);
-  ForangeGhost := TGhost.Create(FSettings, 'Orange', 12, 14.5);
-  FpinkGhost := TGhost.Create(FSettings, 'Pink', 14, 13);
-  FredGhost := TGhost.Create(FSettings, 'Red', 14, 14.5);
-  FHarmless := TGhost.Create(FSettings, 'Harmless', 0, 0);
+  FblueGhost := TGhost.Create(FGame, 'Blue', 12, 13);
+  ForangeGhost := TGhost.Create(FGame, 'Orange', 12, 14.5);
+  FpinkGhost := TGhost.Create(FGame, 'Pink', 14, 13);
+  FredGhost := TGhost.Create(FGame, 'Red', 14, 14.5);
+  FHarmless := TGhost.Create(FGame, 'Harmless', 0, 0);
 end;
 
 destructor TGhostManager.Destroy;
@@ -71,30 +83,24 @@ begin
     FHarmless.Images[i].Free;
   end;
 
-  FblueGhost.Free;
-  ForangeGhost.Free;
-  FpinkGhost.Free;
-  FredGhost.Free;
-  FHarmless.Free;
-
   inherited;
 end;
 
-function TGhostManager.DistanceGhostToPacMan(AGhost: TGhost): Single;
+function TGhostManager.DistanceGhostToPacMan(AGhost: IGhost): Single;
 var
   ghost_x, ghost_y, pac_man_x, pac_man_y: Single;
   delta_x, delta_y: Single;
 begin
-  ghost_x := AGhost.position.X + (FSettings.Scale * 0.65);
-  ghost_y := AGhost.position.Y + (FSettings.Scale * 0.65);
-  pac_man_x := FPlayer.position.X + (FSettings.Scale * 0.65);
-  pac_man_y := FPlayer.position.Y + (FSettings.Scale * 0.65);
+  ghost_x := AGhost.position.X + (FGame.Settings.Scale * 0.65);
+  ghost_y := AGhost.position.Y + (FGame.Settings.Scale * 0.65);
+  pac_man_x := FGame.Player.position.X + (FGame.Settings.Scale * 0.65);
+  pac_man_y := FGame.Player.position.Y + (FGame.Settings.Scale * 0.65);
   delta_x := Sqr(ghost_x - pac_man_x);
   delta_y := Sqr(ghost_y - pac_man_y);
   Result := Sqrt(delta_x + delta_y);
 end;
 
-procedure TGhostManager.GhostIntelligence(AGhost: TGhost);
+procedure TGhostManager.GhostIntelligence(AGhost: IGhost);
 var
   temp_ghost_pos: TPointF;
   temp_pos: TPointF;
@@ -103,7 +109,7 @@ begin
   temp_ghost_pos := AGhost.position;
   AGhost.DistanceToPacMan := DistanceGhostToPacMan(AGhost);
 
-  if AGhost.DistanceToPacMan <= FSettings.Scale * 10 then
+  if AGhost.DistanceToPacMan <= FGame.Settings.Scale * 10 then
   begin
     if AGhost.harmlessMode then
       AGhost.NextDirection := DirectionHarmlessGhostToPacMan(AGhost)
@@ -111,7 +117,7 @@ begin
       AGhost.NextDirection := DirectionGhostToPacMan(AGhost);
 
     temp_dir := AGhost.direction;
-    FMovements.TurningCorner(AGhost.position, temp_dir, AGhost.NextDirection);
+    FGame.Movements.TurningCorner(AGhost.position, temp_dir, AGhost.NextDirection);
     AGhost.direction := temp_dir;
   end;
 
@@ -123,13 +129,13 @@ begin
       AGhost.NextDirection := DirectionGhostToPacMan(AGhost);
 
     temp_pos := AGhost.position;
-    FMovements.Collider(temp_pos, AGhost.direction);
+    FGame.Movements.Collider(temp_pos, AGhost.direction);
     AGhost.position := temp_pos;
   end;
 
   temp_pos := AGhost.position;
-  FMovements.Tunnel(temp_pos);
-  FMovements.Collider(temp_pos, AGhost.direction);
+  FGame.Movements.Tunnel(temp_pos);
+  FGame.Movements.Collider(temp_pos, AGhost.direction);
   AGhost.position := temp_pos;
 
   if temp_ghost_pos = AGhost.position then // Se o fantasma está preso ou não se moveu
@@ -138,7 +144,7 @@ begin
   end;
 end;
 
-function TGhostManager.DirectionHarmlessGhostToPacMan(AGhost: TGhost): TPointF;
+function TGhostManager.DirectionHarmlessGhostToPacMan(AGhost: IGhost): TPointF;
 var
   new_direction: TPointF;
   ghost_x, ghost_y, pac_man_x, pac_man_y: Single;
@@ -147,29 +153,29 @@ begin
   new_direction := PointF(0, 0);
   ghost_x := AGhost.position.X;
   ghost_y := AGhost.position.Y;
-  pac_man_x := FPlayer.position.X;
-  pac_man_y := FPlayer.position.Y;
+  pac_man_x := FGame.Player.position.X;
+  pac_man_y := FGame.Player.position.Y;
   delta_x := ghost_x - pac_man_x;
   delta_y := ghost_y - pac_man_y;
 
   if AGhost.direction.Y <> 0 then // Se o fantasma está se movendo verticalmente
   begin
     if delta_x <= 0 then // Pac-Man está à direita, fantasma foge para a esquerda
-      new_direction.X := -FSettings.Scale / 16
+      new_direction.X := -FGame.Settings.Scale / 16
     else // Pac-Man está à esquerda, fantasma foge para a direita
-      new_direction.X := FSettings.Scale / 16;
+      new_direction.X := FGame.Settings.Scale / 16;
   end;
   if AGhost.direction.X <> 0 then // Se o fantasma está se movendo horizontalmente
   begin
     if delta_y <= 0 then // Pac-Man está abaixo, fantasma foge para cima
-      new_direction.Y := -FSettings.Scale / 16
+      new_direction.Y := -FGame.Settings.Scale / 16
     else // Pac-Man está acima, fantasma foge para baixo
-      new_direction.Y := FSettings.Scale / 16;
+      new_direction.Y := FGame.Settings.Scale / 16;
   end;
   Result := new_direction;
 end;
 
-function TGhostManager.DirectionGhostToPacMan(AGhost: TGhost): TPointF;
+function TGhostManager.DirectionGhostToPacMan(AGhost: IGhost): TPointF;
 var
   new_direction: TPointF;
   ghost_x, ghost_y, pac_man_x, pac_man_y: Single;
@@ -178,29 +184,29 @@ begin
   new_direction := PointF(0, 0);
   ghost_x := AGhost.position.X;
   ghost_y := AGhost.position.Y;
-  pac_man_x := FPlayer.position.X;
-  pac_man_y := FPlayer.position.Y;
+  pac_man_x := FGame.Player.position.X;
+  pac_man_y := FGame.Player.position.Y;
   delta_x := ghost_x - pac_man_x;
   delta_y := ghost_y - pac_man_y;
 
   if AGhost.direction.Y <> 0 then // Se o fantasma está se movendo verticalmente
   begin
     if delta_x <= 0 then // Pac-Man está à direita
-      new_direction.X := FSettings.Scale / 16
+      new_direction.X := FGame.Settings.Scale / 16
     else // Pac-Man está à esquerda
-      new_direction.X := -FSettings.Scale / 16;
+      new_direction.X := -FGame.Settings.Scale / 16;
   end;
   if AGhost.direction.X <> 0 then // Se o fantasma está se movendo horizontalmente
   begin
     if delta_y <= 0 then // Pac-Man está abaixo
-      new_direction.Y := FSettings.Scale / 16
+      new_direction.Y := FGame.Settings.Scale / 16
     else // Pac-Man está acima
-      new_direction.Y := -FSettings.Scale / 16;
+      new_direction.Y := -FGame.Settings.Scale / 16;
   end;
   Result := new_direction;
 end;
 
-procedure TGhostManager.NewRandomDirectionForGhost(AGhost: TGhost);
+procedure TGhostManager.NewRandomDirectionForGhost(AGhost: IGhost);
 var
   new_direction: TPointF;
   temp_pos, temp_dir: TPointF;
@@ -211,25 +217,25 @@ begin
   if AGhost.direction.X <> 0 then // Se estiver movendo horizontalmente
   begin
     if Random(2) = 0 then
-      new_direction.Y := -FSettings.Scale / 8
+      new_direction.Y := -FGame.Settings.Scale / 8
     else
-      new_direction.Y := FSettings.Scale / 8;
+      new_direction.Y := FGame.Settings.Scale / 8;
   end
   else if AGhost.direction.Y <> 0 then // Se estiver movendo verticalmente
   begin
     if Random(2) = 0 then
-      new_direction.X := -FSettings.Scale / 8
+      new_direction.X := -FGame.Settings.Scale / 8
     else
-      new_direction.X := FSettings.Scale / 8;
+      new_direction.X := FGame.Settings.Scale / 8;
   end;
 
   // Tenta mover para a nova direção
-  FMovements.Collider(temp_pos, new_direction);
+  FGame.Movements.Collider(temp_pos, new_direction);
   if temp_pos = AGhost.position then // Se não conseguiu mover (colidiu)
   begin
     new_direction.X := new_direction.X * -1; // Inverte a direção
     new_direction.Y := new_direction.Y * -1;
-    FMovements.Collider(temp_pos, new_direction); // Tenta mover na direção oposta
+    FGame.Movements.Collider(temp_pos, new_direction); // Tenta mover na direção oposta
   end;
 
   temp_dir.X := new_direction.X / 2;
@@ -239,7 +245,7 @@ begin
   AGhost.position := temp_pos;
 end;
 
-procedure TGhostManager.OnPowerPelletCollected;
+procedure TGhostManager.PowerPelletCollected;
 begin
   blueGhost.harmlessMode := true;
   orangeGhost.harmlessMode := true;
@@ -249,19 +255,19 @@ end;
 
 procedure TGhostManager.Execute(Canvas: TCanvas);
 begin
-  if FSettings.harmlessMode then
+  if FGame.Settings.harmlessMode then
   begin
-    if FSettings.SpriteFrame = 60 then
-      FSettings.HarmlessModeTimer := FSettings.HarmlessModeTimer + 1;
+    if FGame.Settings.SpriteFrame = 60 then
+      FGame.Settings.HarmlessModeTimer := FGame.Settings.HarmlessModeTimer + 1;
 
-    if FSettings.HarmlessModeTimer = 16 then
+    if FGame.Settings.HarmlessModeTimer = 16 then
     begin
-      FSettings.harmlessMode := False;
+      FGame.Settings.harmlessMode := False;
       blueGhost.harmlessMode := False;
       orangeGhost.harmlessMode := False;
       pinkGhost.harmlessMode := False;
       redGhost.harmlessMode := False;
-      FSettings.HarmlessModeTimer := 0;
+      FGame.Settings.HarmlessModeTimer := 0;
     end;
   end;
 
@@ -285,15 +291,15 @@ begin
   else
     DrawGhost(Canvas, 'red', redGhost.position);
 
-  if FSettings.SpriteFrame = 60 then
+  if FGame.Settings.SpriteFrame = 60 then
   begin
-    if blueGhost.position = PointF(FSettings.Scale * 12, FSettings.Scale * 13) then
+    if blueGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
       MoveGhostIntoGame('blue')
-    else if orangeGhost.position = PointF(FSettings.Scale * 12, FSettings.Scale * 14.5) then
+    else if orangeGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5) then
       MoveGhostIntoGame('orange')
-    else if pinkGhost.position = PointF(FSettings.Scale * 14, FSettings.Scale * 13) then
+    else if pinkGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
       MoveGhostIntoGame('pink')
-    else if redGhost.position = PointF(FSettings.Scale * 14, FSettings.Scale * 14.5) then
+    else if redGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
       MoveGhostIntoGame('red');
   end;
 end;
@@ -303,7 +309,7 @@ var
   imageIndex: Integer;
   ghostBitmap: TBitmap;
 begin
-  imageIndex := FSettings.SpriteFrame div 30;
+  imageIndex := FGame.Settings.SpriteFrame div 30;
   if imageIndex > 1 then
     imageIndex := 0;
 
@@ -319,33 +325,33 @@ begin
     ghostBitmap := Harmless.Images[imageIndex];
   // Desenhar o fantasma
   Canvas.DrawBitmap(ghostBitmap, RectF(0, 0, ghostBitmap.Width, ghostBitmap.Height),
-    RectF(position.X, position.Y, position.X + Round(FSettings.Scale * 1.3),
-    position.Y + Round(FSettings.Scale * 1.3)), 1);
+    RectF(position.X, position.Y, position.X + Round(FGame.Settings.Scale * 1.3),
+    position.Y + Round(FGame.Settings.Scale * 1.3)), 1);
 end;
 
 procedure TGhostManager.MoveGhostIntoGame(color: String);
 begin
   if color = 'blue' then
   begin
-    blueGhost.position := PointF(FSettings.Scale * 13.1, FSettings.Scale * 10.6);
+    blueGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
     blueGhost.direction := RandomDirectionForGhost;
     blueGhost.NextDirection := RandomNextDirectionForGhost(blueGhost.direction);
   end
   else if color = 'orange' then
   begin
-    orangeGhost.position := PointF(FSettings.Scale * 13.1, FSettings.Scale * 10.6);
+    orangeGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
     orangeGhost.direction := RandomDirectionForGhost;
     orangeGhost.NextDirection := RandomNextDirectionForGhost(orangeGhost.direction);
   end
   else if color = 'pink' then
   begin
-    pinkGhost.position := PointF(FSettings.Scale * 13.1, FSettings.Scale * 10.6);
+    pinkGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
     pinkGhost.direction := RandomDirectionForGhost;
     pinkGhost.NextDirection := RandomNextDirectionForGhost(pinkGhost.direction);
   end
   else if color = 'red' then
   begin
-    redGhost.position := PointF(FSettings.Scale * 13.1, FSettings.Scale * 10.6);
+    redGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
     redGhost.direction := RandomDirectionForGhost;
     redGhost.NextDirection := RandomNextDirectionForGhost(redGhost.direction);
   end;
@@ -363,16 +369,16 @@ begin
   if move_up_or_sideways = 0 then // Movimento horizontal
   begin
     if x_direction = 0 then
-      Result := PointF(-FSettings.Scale / 16, 0)
+      Result := PointF(-FGame.Settings.Scale / 16, 0)
     else
-      Result := PointF(FSettings.Scale / 16, 0);
+      Result := PointF(FGame.Settings.Scale / 16, 0);
   end
   else // Movimento vertical
   begin
     if y_direction = 0 then
-      Result := PointF(0, -FSettings.Scale / 16)
+      Result := PointF(0, -FGame.Settings.Scale / 16)
     else
-      Result := PointF(0, FSettings.Scale / 16);
+      Result := PointF(0, FGame.Settings.Scale / 16);
   end;
 end;
 
@@ -384,36 +390,86 @@ begin
   if direction.X <> 0 then // Se estiver movendo horizontalmente, a próxima direção será vertical
   begin
     if Random(2) = 0 then
-      new_direction.Y := -FSettings.Scale / 16
+      new_direction.Y := -FGame.Settings.Scale / 16
     else
-      new_direction.Y := FSettings.Scale / 16;
+      new_direction.Y := FGame.Settings.Scale / 16;
   end
   else if direction.Y <> 0 then
   // Se estiver movendo verticalmente, a próxima direção será horizontal
   begin
     if Random(2) = 0 then
-      new_direction.X := -FSettings.Scale / 16
+      new_direction.X := -FGame.Settings.Scale / 16
     else
-      new_direction.X := FSettings.Scale / 16;
+      new_direction.X := FGame.Settings.Scale / 16;
   end;
   Result := new_direction;
 end;
 
+function TGhostManager.GetBlueGhost: IGhost;
+begin
+  Result := FblueGhost;
+end;
+
+function TGhostManager.GetHarmless: IGhost;
+begin
+  Result := FHarmless;
+end;
+
+function TGhostManager.GetOrangeGhost: IGhost;
+begin
+  Result := ForangeGhost;
+end;
+
+function TGhostManager.GetPinkGhost: IGhost;
+begin
+  Result := FpinkGhost;
+end;
+
+function TGhostManager.GetRedGhost: IGhost;
+begin
+  Result := FredGhost;
+end;
+
+procedure TGhostManager.SetBlueGhost(const AValue: IGhost);
+begin
+  FblueGhost := AValue;
+end;
+
+procedure TGhostManager.SetHarmless(const AValue: IGhost);
+begin
+  FHarmless := AValue;
+end;
+
+procedure TGhostManager.SetOrangeGhost(const AValue: IGhost);
+begin
+  OrangeGhost := AValue;
+end;
+
+procedure TGhostManager.SetPinkGhost(const AValue: IGhost);
+begin
+  FPinkGhost := AValue;
+end;
+
+procedure TGhostManager.SetRedGhost(const AValue: IGhost);
+begin
+  FRedGhost := AValue;
+end;
+
 procedure TGhostManager.GhostAI;
 begin
-  if blueGhost.Position  <> PointF(FSettings.Scale * 12, FSettings.Scale * 13) then
+  if blueGhost.Position  <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
   begin
     GhostIntelligence(blueGhost);
   end;
-  if OrangeGhost.Position <> PointF(FSettings.Scale * 12, FSettings.Scale * 14.5) then
+  if OrangeGhost.Position <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5) then
   begin
     GhostIntelligence(OrangeGhost);
   end;
-  if PinkGhost.Position <> PointF(FSettings.Scale * 14, FSettings.Scale * 13) then
+  if PinkGhost.Position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
   begin
     GhostIntelligence(PinkGhost);
   end;
-  if RedGhost.Position <> PointF(FSettings.Scale * 14, FSettings.Scale * 14.5) then
+  if RedGhost.Position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
   begin
     GhostIntelligence(RedGhost);
   end;

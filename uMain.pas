@@ -5,16 +5,15 @@ interface
 uses
   FMX.Forms,
   System.Classes,
-  uGame;
+  PacMan.Interfaces.Game;
 
 type
   TPacManForm = class(TForm)
-    procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
-    Game: TGame;
+    Game: IGame;
   public
     { Public declarations }
   end;
@@ -24,17 +23,15 @@ var
 
 implementation
 
+uses
+  PacMan.Classes.uGame;
+
 {$R *.fmx}
 
 procedure TPacManForm.FormCreate(Sender: TObject);
 begin
-  Game := TGame.Create(Self);
+  Game := TGame.New(Self);
   Game.StartGame;
-end;
-
-procedure TPacManForm.FormDestroy(Sender: TObject);
-begin
-  Game.Free;
 end;
 
 procedure TPacManForm.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;

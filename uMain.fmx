@@ -10,7 +10,6 @@ object PacManForm: TPacManForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   DesignerMasterStyle = 0
 end
