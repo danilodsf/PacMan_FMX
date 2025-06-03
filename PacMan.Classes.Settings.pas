@@ -15,7 +15,6 @@ type
     FLives: Integer;
     FEndGame: Boolean;
     FHarmlessMode: Boolean;
-    FHarmlessModeTimer: Integer;
 
     function GetScale: Single;
     function GetSpriteFrame: Integer;
@@ -24,7 +23,6 @@ type
     function GetLives: Integer;
     function GetEndGame: Boolean;
     function GetHarmlessMode: Boolean;
-    function GetHarmlessModeTimer: Integer;
 
     procedure SetScale(const AValue: Single);
     procedure SetSpriteFrame(const AValue: Integer);
@@ -33,7 +31,6 @@ type
     procedure SetLives(const AValue: Integer);
     procedure SetEndGame(const AValue: Boolean);
     procedure SetHarmlessMode(const AValue: Boolean);
-    procedure SetHarmlessModeTimer(const AValue: Integer);
   public
     property Scale: Single read GetScale;
     property SpriteFrame: Integer read GetSpriteFrame write SetSpriteFrame;
@@ -42,7 +39,6 @@ type
     property Lives: Integer read GetLives write SetLives;
     property EndGame: Boolean read GetEndGame write SetEndGame;
     property HarmlessMode: Boolean read GetHarmlessMode write SetHarmlessMode;
-    property HarmlessModeTimer: Integer read GetHarmlessModeTimer write SetHarmlessModeTimer;
 
     constructor Create;
   end;
@@ -60,7 +56,6 @@ begin
   FLives := 5;
   FEndGame := False;
   FHarmlessMode := False;
-  FHarmlessModeTimer := 0;
 end;
 
 function TSettings.GetEndGame: Boolean;
@@ -71,11 +66,6 @@ end;
 function TSettings.GetHarmlessMode: Boolean;
 begin
   Result := FHarmlessMode;
-end;
-
-function TSettings.GetHarmlessModeTimer: Integer;
-begin
-  Result := FHarmlessModeTimer;
 end;
 
 function TSettings.GetLives: Integer;
@@ -111,11 +101,6 @@ end;
 procedure TSettings.SetHarmlessMode(const AValue: Boolean);
 begin
   FHarmlessMode := AValue;
-end;
-
-procedure TSettings.SetHarmlessModeTimer(const AValue: Integer);
-begin
-  FHarmlessModeTimer := AValue;
 end;
 
 procedure TSettings.SetLives(const AValue: Integer);

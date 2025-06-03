@@ -17,6 +17,7 @@ type
     function GetDistanceToPacMan: Single;
     function GetImages: TArray<TBitmap>;
     function GetColor: string;
+    function GetHarmlessModeTimer: Integer;
 
     procedure SetHarmlessMode(const AValue: Boolean);
     procedure SetPosition(const AValue: TPointF);
@@ -24,6 +25,7 @@ type
     procedure SetNextDirection(const AValue: TPointF);
     procedure SetDistanceToPacMan(const AValue: Single);
     procedure SetImages(const AValue: TArray<TBitmap>);
+    procedure SetHarmlessModeTimer(const AValue: Integer);
 
     property HarmlessMode: boolean read GetHarmlessMode write SetHarmlessMode;
     property Position: TPointF read GetPosition write SetPosition;
@@ -32,6 +34,7 @@ type
     property DistanceToPacMan: Single read GetDistanceToPacMan write SetDistanceToPacMan;
     property Images: TArray<TBitmap> read GetImages write SetImages;
     property Color: string read GetColor;
+    property HarmlessModeTimer: Integer read GetHarmlessModeTimer write SetHarmlessModeTimer;
   end;
 
 implementation

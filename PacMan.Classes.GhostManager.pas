@@ -74,12 +74,12 @@ destructor TGhostManager.Destroy;
 var
   i: integer;
 begin
-  for i := 0 to High(blueGhost.Images) do
+  for i := 0 to High(BlueGhost.Images) do
   begin
-    FBlueGhost.Images[i].Free;
-    FOrangeGhost.Images[i].Free;
-    FPinkGhost.Images[i].Free;
-    FRedGhost.Images[i].Free;
+    FblueGhost.Images[i].Free;
+    ForangeGhost.Images[i].Free;
+    FpinkGhost.Images[i].Free;
+    FredGhost.Images[i].Free;
     FHarmless.Images[i].Free;
   end;
 
@@ -247,10 +247,10 @@ end;
 
 procedure TGhostManager.PowerPelletCollected;
 begin
-  blueGhost.harmlessMode := true;
-  orangeGhost.harmlessMode := true;
-  pinkGhost.harmlessMode := true;
-  redGhost.harmlessMode := true;
+  BlueGhost.harmlessMode := true;
+  OrangeGhost.harmlessMode := true;
+  PinkGhost.harmlessMode := true;
+  RedGhost.harmlessMode := true;
 end;
 
 procedure TGhostManager.Execute(Canvas: TCanvas);
@@ -258,55 +258,86 @@ begin
   if FGame.Settings.harmlessMode then
   begin
     if FGame.Settings.SpriteFrame = 60 then
-      FGame.Settings.HarmlessModeTimer := FGame.Settings.HarmlessModeTimer + 1;
-
-    if FGame.Settings.HarmlessModeTimer = 16 then
     begin
-      FGame.Settings.harmlessMode := False;
-      blueGhost.harmlessMode := False;
-      orangeGhost.harmlessMode := False;
-      pinkGhost.harmlessMode := False;
-      redGhost.harmlessMode := False;
-      FGame.Settings.HarmlessModeTimer := 0;
+      if BlueGhost.harmlessMode then
+        BlueGhost.HarmlessModeTimer := BlueGhost.HarmlessModeTimer + 1;
+
+      if OrangeGhost.harmlessMode then
+        OrangeGhost.HarmlessModeTimer := OrangeGhost.HarmlessModeTimer + 1;
+
+      if PinkGhost.harmlessMode then
+        PinkGhost.HarmlessModeTimer := PinkGhost.HarmlessModeTimer + 1;
+
+      if RedGhost.harmlessMode then
+        RedGhost.HarmlessModeTimer := RedGhost.HarmlessModeTimer + 1;
     end;
+
+    if BlueGhost.HarmlessModeTimer = 16 then
+    begin
+      BlueGhost.harmlessMode := False;
+      BlueGhost.HarmlessModeTimer := 0;
+    end;
+
+    if OrangeGhost.HarmlessModeTimer = 16 then
+    begin
+      OrangeGhost.harmlessMode := False;
+      OrangeGhost.HarmlessModeTimer := 0;
+    end;
+
+    if PinkGhost.HarmlessModeTimer = 16 then
+    begin
+      PinkGhost.harmlessMode := False;
+      PinkGhost.HarmlessModeTimer := 0;
+    end;
+
+    if RedGhost.HarmlessModeTimer = 16 then
+    begin
+      RedGhost.harmlessMode := False;
+      RedGhost.HarmlessModeTimer := 0;
+    end;
+
+    if (not BlueGhost.harmlessMode) and (not OrangeGhost.harmlessMode) and
+      (not PinkGhost.harmlessMode) and (not RedGhost.harmlessMode) then
+      FGame.Settings.harmlessMode := False;
   end;
 
-  if blueGhost.harmlessMode then
-    DrawGhost(Canvas, 'harmless', blueGhost.position)
+  if BlueGhost.harmlessMode then
+    DrawGhost(Canvas, 'harmless', BlueGhost.position)
   else
-    DrawGhost(Canvas, 'blue', blueGhost.position);
+    DrawGhost(Canvas, 'blue', BlueGhost.position);
 
-  if orangeGhost.harmlessMode then
-    DrawGhost(Canvas, 'harmless', orangeGhost.position)
+  if OrangeGhost.harmlessMode then
+    DrawGhost(Canvas, 'harmless', OrangeGhost.position)
   else
-    DrawGhost(Canvas, 'orange', orangeGhost.position);
+    DrawGhost(Canvas, 'orange', OrangeGhost.position);
 
-  if pinkGhost.harmlessMode then
-    DrawGhost(Canvas, 'harmless', pinkGhost.position)
+  if PinkGhost.harmlessMode then
+    DrawGhost(Canvas, 'harmless', PinkGhost.position)
   else
-    DrawGhost(Canvas, 'pink', pinkGhost.position);
+    DrawGhost(Canvas, 'pink', PinkGhost.position);
 
-  if redGhost.harmlessMode then
-    DrawGhost(Canvas, 'harmless', redGhost.position)
+  if RedGhost.harmlessMode then
+    DrawGhost(Canvas, 'harmless', RedGhost.position)
   else
-    DrawGhost(Canvas, 'red', redGhost.position);
+    DrawGhost(Canvas, 'red', RedGhost.position);
 
   if FGame.Settings.SpriteFrame = 60 then
   begin
-    if blueGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
+    if BlueGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
       MoveGhostIntoGame('blue')
-    else if orangeGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5) then
+    else if OrangeGhost.position = PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5)
+    then
       MoveGhostIntoGame('orange')
-    else if pinkGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
+    else if PinkGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
       MoveGhostIntoGame('pink')
-    else if redGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
+    else if RedGhost.position = PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
       MoveGhostIntoGame('red');
   end;
 end;
 
 procedure TGhostManager.DrawGhost(Canvas: TCanvas; color: String; position: TPointF);
 var
-  imageIndex: Integer;
+  imageIndex: integer;
   ghostBitmap: TBitmap;
 begin
   imageIndex := FGame.Settings.SpriteFrame div 30;
@@ -314,13 +345,13 @@ begin
     imageIndex := 0;
 
   if color = 'blue' then
-    ghostBitmap := blueGhost.Images[imageIndex]
+    ghostBitmap := BlueGhost.Images[imageIndex]
   else if color = 'orange' then
-    ghostBitmap := orangeGhost.Images[imageIndex]
+    ghostBitmap := OrangeGhost.Images[imageIndex]
   else if color = 'pink' then
-    ghostBitmap := pinkGhost.Images[imageIndex]
+    ghostBitmap := PinkGhost.Images[imageIndex]
   else if color = 'red' then
-    ghostBitmap := redGhost.Images[imageIndex]
+    ghostBitmap := RedGhost.Images[imageIndex]
   else
     ghostBitmap := Harmless.Images[imageIndex];
   // Desenhar o fantasma
@@ -333,34 +364,34 @@ procedure TGhostManager.MoveGhostIntoGame(color: String);
 begin
   if color = 'blue' then
   begin
-    blueGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
-    blueGhost.direction := RandomDirectionForGhost;
-    blueGhost.NextDirection := RandomNextDirectionForGhost(blueGhost.direction);
+    BlueGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
+    BlueGhost.direction := RandomDirectionForGhost;
+    BlueGhost.NextDirection := RandomNextDirectionForGhost(BlueGhost.direction);
   end
   else if color = 'orange' then
   begin
-    orangeGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
-    orangeGhost.direction := RandomDirectionForGhost;
-    orangeGhost.NextDirection := RandomNextDirectionForGhost(orangeGhost.direction);
+    OrangeGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
+    OrangeGhost.direction := RandomDirectionForGhost;
+    OrangeGhost.NextDirection := RandomNextDirectionForGhost(OrangeGhost.direction);
   end
   else if color = 'pink' then
   begin
-    pinkGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
-    pinkGhost.direction := RandomDirectionForGhost;
-    pinkGhost.NextDirection := RandomNextDirectionForGhost(pinkGhost.direction);
+    PinkGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
+    PinkGhost.direction := RandomDirectionForGhost;
+    PinkGhost.NextDirection := RandomNextDirectionForGhost(PinkGhost.direction);
   end
   else if color = 'red' then
   begin
-    redGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
-    redGhost.direction := RandomDirectionForGhost;
-    redGhost.NextDirection := RandomNextDirectionForGhost(redGhost.direction);
+    RedGhost.position := PointF(FGame.Settings.Scale * 13.1, FGame.Settings.Scale * 10.6);
+    RedGhost.direction := RandomDirectionForGhost;
+    RedGhost.NextDirection := RandomNextDirectionForGhost(RedGhost.direction);
   end;
 end;
 
 function TGhostManager.RandomDirectionForGhost: TPointF;
 var
-  move_up_or_sideways: Integer;
-  x_direction, y_direction: Integer;
+  move_up_or_sideways: integer;
+  x_direction, y_direction: integer;
 begin
   move_up_or_sideways := Random(2); // 0 ou 1
   x_direction := Random(2);
@@ -447,29 +478,29 @@ end;
 
 procedure TGhostManager.SetPinkGhost(const AValue: IGhost);
 begin
-  FPinkGhost := AValue;
+  FpinkGhost := AValue;
 end;
 
 procedure TGhostManager.SetRedGhost(const AValue: IGhost);
 begin
-  FRedGhost := AValue;
+  FredGhost := AValue;
 end;
 
 procedure TGhostManager.GhostAI;
 begin
-  if blueGhost.Position  <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
+  if BlueGhost.position <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 13) then
   begin
-    GhostIntelligence(blueGhost);
+    GhostIntelligence(BlueGhost);
   end;
-  if OrangeGhost.Position <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5) then
+  if OrangeGhost.position <> PointF(FGame.Settings.Scale * 12, FGame.Settings.Scale * 14.5) then
   begin
     GhostIntelligence(OrangeGhost);
   end;
-  if PinkGhost.Position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
+  if PinkGhost.position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 13) then
   begin
     GhostIntelligence(PinkGhost);
   end;
-  if RedGhost.Position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
+  if RedGhost.position <> PointF(FGame.Settings.Scale * 14, FGame.Settings.Scale * 14.5) then
   begin
     GhostIntelligence(RedGhost);
   end;

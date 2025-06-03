@@ -290,7 +290,7 @@
             <Form>PacManForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="PacMan.uUtils.pas"/>
+        <DCCReference Include="PacMan.Utils.pas"/>
         <DCCReference Include="PacMan.Classes.uGhost.pas"/>
         <DCCReference Include="PacMan.Classes.Player.pas"/>
         <DCCReference Include="PacMan.Classes.GhostManager.pas"/>

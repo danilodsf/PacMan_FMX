@@ -4,7 +4,7 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   uMain in 'uMain.pas' {PacManForm},
-  PacMan.uUtils in 'PacMan.uUtils.pas',
+  PacMan.Utils in 'PacMan.Utils.pas',
   PacMan.Classes.uGhost in 'PacMan.Classes.uGhost.pas',
   PacMan.Classes.Player in 'PacMan.Classes.Player.pas',
   PacMan.Classes.GhostManager in 'PacMan.Classes.GhostManager.pas',

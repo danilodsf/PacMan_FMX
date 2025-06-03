@@ -22,7 +22,8 @@ uses
 type
   TGame = class(TInterfacedObject, IGame)
   private
-    class var FGame: IGame;
+  class var
+    FGame: IGame;
     FSettings: ISettings;
     FPlayer: IPlayer;
     FGhostManager: IGhostManager;
@@ -251,11 +252,14 @@ begin
   begin
     FSettings.EndGame := False;
     FSettings.harmlessMode := False;
-    FSettings.HarmlessModeTimer := 0;
     GhostManager.blueGhost.harmlessMode := False;
     GhostManager.OrangeGhost.harmlessMode := False;
     GhostManager.PinkGhost.harmlessMode := False;
     GhostManager.RedGhost.harmlessMode := False;
+    GhostManager.blueGhost.HarmlessModeTimer := 0;
+    GhostManager.OrangeGhost.HarmlessModeTimer := 0;
+    GhostManager.PinkGhost.HarmlessModeTimer := 0;
+    GhostManager.RedGhost.HarmlessModeTimer := 0;
     Player.Position := PointF(FSettings.Scale * 13.1, FSettings.Scale * 22.6);
     Player.Direction := PointF(FSettings.Scale / 12 * Player.SpeedFactor, 0);
     Player.NextDirection := PointF(FSettings.Scale / 12 * Player.SpeedFactor, 0);
@@ -296,11 +300,14 @@ begin
     // Reinicia o nível (mantém a pontuação e vidas, mas reseta o mapa e posições)
     Settings.EndGame := False;
     Settings.harmlessMode := False;
-    Settings.HarmlessModeTimer := 0;
     GhostManager.blueGhost.harmlessMode := False;
     GhostManager.OrangeGhost.harmlessMode := False;
     GhostManager.PinkGhost.harmlessMode := False;
     GhostManager.RedGhost.harmlessMode := False;
+    GhostManager.blueGhost.HarmlessModeTimer := 0;
+    GhostManager.OrangeGhost.HarmlessModeTimer := 0;
+    GhostManager.PinkGhost.HarmlessModeTimer := 0;
+    GhostManager.RedGhost.HarmlessModeTimer := 0;
     Player.Position := PointF(Settings.Scale * 13.1, Settings.Scale * 22.6);
     Player.Direction := PointF(Settings.Scale / 12 * Player.SpeedFactor, 0);
     Player.NextDirection := PointF(Settings.Scale / 12 * Player.SpeedFactor, 0);
@@ -405,7 +412,7 @@ begin
     FGhostManager := TGhostManager.Create(FGame);
   end;
 
-  Result := FGame;
+  result := FGame;
 end;
 
 procedure TGame.RestartGame;
@@ -416,11 +423,14 @@ begin
   Settings.Lives := 5;
   Settings.EndGame := False;
   Settings.harmlessMode := False;
-  Settings.HarmlessModeTimer := 0;
   GhostManager.blueGhost.harmlessMode := False;
   GhostManager.OrangeGhost.harmlessMode := False;
   GhostManager.PinkGhost.harmlessMode := False;
   GhostManager.RedGhost.harmlessMode := False;
+  GhostManager.blueGhost.HarmlessModeTimer := 0;
+  GhostManager.OrangeGhost.HarmlessModeTimer := 0;
+  GhostManager.PinkGhost.HarmlessModeTimer := 0;
+  GhostManager.RedGhost.HarmlessModeTimer := 0;
   Player.Position := PointF(Settings.Scale * 13.1, Settings.Scale * 22.6);
   Player.Direction := PointF(Settings.Scale / 12 * Player.SpeedFactor, 0);
   Player.NextDirection := PointF(Settings.Scale / 12 * Player.SpeedFactor, 0);

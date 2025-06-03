@@ -21,6 +21,7 @@ type
     FDistanceToPacMan: Single;
     FImages: TArray<TBitmap>;
     FColor: string;
+    FHarmlessModeTimer: Integer;
 
     FGame: IGame;
     procedure LoadImages;
@@ -31,6 +32,7 @@ type
     function GetDistanceToPacMan: Single;
     function GetImages: TArray<TBitmap>;
     function GetColor: string;
+    function GetHarmlessModeTimer: Integer;
 
     procedure SetHarmlessMode(const AValue: Boolean);
     procedure SetPosition(const AValue: TPointF);
@@ -38,7 +40,9 @@ type
     procedure SetNextDirection(const AValue: TPointF);
     procedure SetDistanceToPacMan(const AValue: Single);
     procedure SetImages(const AValue: TArray<TBitmap>);
+    procedure SetHarmlessModeTimer(const AValue: Integer);
   public
+    property HarmlessModeTimer: Integer read GetHarmlessModeTimer write SetHarmlessModeTimer;
     property HarmlessMode: boolean read GetHarmlessMode write SetHarmlessMode;
     property Position: TPointF read GetPosition write SetPosition;
     property Direction: TPointF read GetDirection write SetDirection;
@@ -62,7 +66,7 @@ begin
   Fdirection := PointF(0, 0);
   FnextDirection := PointF(0, 0);
   FdistanceToPacMan := 0;
-
+  FHarmlessModeTimer := 0;
   LoadImages;
 end;
 
@@ -133,6 +137,8 @@ end;
 procedure TGhost.SetHarmlessMode(const AValue: Boolean);
 begin
   Fharmless_mode := AValue;
+  if Fharmless_mode then
+    FHarmlessModeTimer := 0;
 end;
 
 procedure TGhost.SetImages(const AValue: TArray<TBitmap>);
@@ -148,6 +154,16 @@ end;
 procedure TGhost.SetPosition(const AValue: TPointF);
 begin
   FPosition := AValue;
+end;
+
+function TGhost.GetHarmlessModeTimer: Integer;
+begin
+  Result := FHarmlessModeTimer;
+end;
+
+procedure TGhost.SetHarmlessModeTimer(const AValue: Integer);
+begin
+  FHarmlessModeTimer := AValue;
 end;
 
 end.

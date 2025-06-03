@@ -12,7 +12,6 @@ type
     function GetLives: Integer;
     function GetEndGame: Boolean;
     function GetHarmlessMode: Boolean;
-    function GetHarmlessModeTimer: Integer;
 
     procedure SetScale(const AValue: Single);
     procedure SetSpriteFrame(const AValue: Integer);
@@ -21,7 +20,6 @@ type
     procedure SetLives(const AValue: Integer);
     procedure SetEndGame(const AValue: Boolean);
     procedure SetHarmlessMode(const AValue: Boolean);
-    procedure SetHarmlessModeTimer(const AValue: Integer);
 
     property Scale: Single read GetScale;
     property SpriteFrame: Integer read GetSpriteFrame write SetSpriteFrame;
@@ -30,7 +28,6 @@ type
     property Lives: Integer read GetLives write SetLives;
     property EndGame: Boolean read GetEndGame write SetEndGame;
     property HarmlessMode: Boolean read GetHarmlessMode write SetHarmlessMode;
-    property HarmlessModeTimer: Integer read GetHarmlessModeTimer write SetHarmlessModeTimer;
   end;
 
 implementation
